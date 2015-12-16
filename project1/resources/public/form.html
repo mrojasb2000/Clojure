@@ -1,11 +1,38 @@
 <html>
-    <body>
-        <form action="/form" method="POST" enctype="multipart/form-data">
-        <p>Login: <input type="text" name="login"/></p>
-        <p>Password: <input type="password" name="password"/></p>
-        <p>File:<input type="file" name="file"/></p>
-        <p><button type="submit">Send!</button></p>
+    <head>
+        <script src="javascripts/jquery-1.11.3.min.js"></script>
+        <script src="javascripts/bootstrap.js"></script>
 
-    </form>
+        <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap-theme.css">
+    </head>
+    <body>
+         <div class="container theme-showcase" role="main">
+              <div class="row">
+                <div class="col-md-6">
+                    <form action="/form" method="POST" enctype="multipart/form-data">
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" name="login">
+                        </div>
+                        <br />
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Password</span>
+                            <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1" name="password">
+                        </div>
+                        <br />
+                        <div class="input-group">
+                            <!--<span class="input-group-addon" id="basic-addon1">File</span>-->
+                            <input type="file" name="file" class="file" placeholder="Files"/>
+                        </div>
+                        <br />
+
+                    <button class="btn btn-lg btn-primary" type="submit">Send!</button>
+
+                </form>
+            </div> <!-- row-md-6 -->
+           </div> <!-- row -->
+        </div> <!-- container -->
     </body>
 </html>

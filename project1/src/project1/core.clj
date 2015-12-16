@@ -5,6 +5,9 @@
             [ring.middleware.params]
             [ring.middleware.keyword-params]
             [ring.middleware.multipart-params]
+            [ring.middleware.cookies]
+            [ring.middleware.session]
+            [ring.middleware.session.memory]
             [project1.another :as another]
             [project1.html :as html]
             [clojure.string]))
@@ -15,6 +18,9 @@
 
 (defn on-destroy []
   (println "Destroying sample webapp!"))
+
+
+
 
 
 ;; Content HTML
@@ -107,10 +113,24 @@
 ;;              "\nquery-params:\n" (:query-params request)
 ;;              "\nform-params:\n" (:form-params request))})
 
+(defn cookie-handle [request]
+  {:body (layout [:div [:p "Cookies:"]
+                       [:pre (:cookies request)]])})
+
+(defn session-handle [request]
+  {:body (layout [:div [:p "Session:"]
+                       [:pre (:session request)]])})
+
+(defn logout-handle [request]
+  {:body "Logged out."
+   :session nil})
 
 (defn form-handler [request]
   {:status 200
    :header { "Content-type" "text/html" }
+   :cookies {:username (:login (:params request))}  ;;Add cookies data
+   :session {:username (:login (:params request))
+             :cnt (inc (or (:cnt (:session request)) 0))} ;;Add session data
    :body (layout
           [:div
            [:p "params:"]
@@ -135,6 +155,9 @@
         "/test3" (handlers/handler3 request)
         "/test4" (another/handler4 request)
         "/form" (form-handler request)  ;; Route form
+        "/cookies" (cookie-handle request)
+        "/sessions" (session-handle request)
+        "/logout" (logout-handle request)
         nil))
 
 (defn wrapping-handler [request]
@@ -163,5 +186,12 @@
    ring.middleware.keyword-params/wrap-keyword-params
    ring.middleware.params/wrap-params
    ring.middleware.multipart-params/wrap-multipart-params
+   ring.middleware.cookies/wrap-cookies
+   (ring.middleware.session/wrap-session
+    {:cookie-name "ring-session"
+     :root "/"
+     :cookie-attrs {:max-age 600
+                    :secure false}
+     :store (ring.middleware.session.memory/memory-store)})
    simple-log-middleware))
 
